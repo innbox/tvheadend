@@ -15,7 +15,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -29,6 +28,8 @@
 #include <ctype.h>
 
 #include "tvheadend.h"
+
+#if ENABLE_LINUXDVB
 #include "dvb/dvb.h"
 #include "muxes.h"
 #include "filebundle.h"
@@ -379,3 +380,4 @@ void muxes_init ( void )
 #endif
   _muxes_load_dir(path, NULL, 0);
 } 
+#endif

@@ -47,6 +47,9 @@ typedef struct rawts {
 
 } rawts_t;
 
+#if ENABLE_ANDROID
+extern int clock_nanosleep(clockid_t, int, const struct timespec *, struct timespec *);
+#endif
 
 /**
  *

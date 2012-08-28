@@ -252,6 +252,7 @@ void epggrab_ota_create_and_register_by_id
   ( epggrab_module_ota_t *mod, int onid, int tsid, int period, int interval, 
     const char *networkname )
 {
+#if ENABLE_LINUXDVB
   th_dvb_adapter_t *tda;
   th_dvb_mux_instance_t *tdmi;
   epggrab_ota_mux_t *ota;
@@ -264,6 +265,7 @@ void epggrab_ota_create_and_register_by_id
       epggrab_ota_register(ota, period, interval);
     }
   }
+#endif
 }
 
 /*
@@ -381,11 +383,13 @@ void epggrab_ota_complete  ( epggrab_ota_mux_t *ota )
       if (ota->is_reg && ota->state == EPGGRAB_OTA_MUX_RUNNING) break;
     }
 
+#if ENABLE_LINUXDVB
     /* All complete (bring timer forward) */
     if (!ota) {
       gtimer_arm(&tdmi->tdmi_adapter->tda_mux_scanner_timer,
                  dvb_adapter_mux_scanner, tdmi->tdmi_adapter, 20);
     }
+#endif
   }
 }
 

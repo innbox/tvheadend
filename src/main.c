@@ -41,7 +41,9 @@
 #include "access.h"
 #include "http.h"
 #include "webui/webui.h"
+#if ENABLE_LINUXDVB
 #include "dvb/dvb.h"
+#endif
 #include "epggrab.h"
 #include "spawn.h"
 #include "subscriptions.h"
@@ -169,6 +171,9 @@ static int
 get_user_groups (const struct passwd *pw, gid_t* glist, size_t gmax)
 {
   int num = 0;
+#if ENABLE_ANDROID
+  return num;
+#else
   struct group *gr;
   char **mem;
   glist[num++] = pw->pw_gid;
@@ -179,6 +184,7 @@ get_user_groups (const struct passwd *pw, gid_t* glist, size_t gmax)
     }
   }
   return num;
+#endif
 }
 
 /**

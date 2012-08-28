@@ -41,6 +41,10 @@
 #include "psi.h"
 #include "settings.h"
 
+#if ENABLE_ANDROID
+#include <sys/socket.h>
+#endif
+
 static int iptv_thread_running;
 static int iptv_epollfd;
 static pthread_mutex_t iptv_recvmutex;

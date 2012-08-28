@@ -46,6 +46,10 @@
 #include "ffdecsa/FFdecsa.h"
 #endif
 
+#if ENABLE_ANDROID
+#include <sys/socket.h>
+#endif
+
 /**
  *
  */

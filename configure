@@ -28,6 +28,7 @@ OPTIONS=(
   "inotify:auto"
   "bundle:no"
   "dvbcsa:no"
+  "android:no"
 )
 
 #

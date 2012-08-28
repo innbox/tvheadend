@@ -1,6 +1,6 @@
 /*
  *  TV Input - Linux DVB interface
- *  Copyright (C) 2007 Andreas Öman
+ *  Copyright (C) 2007 Andreas ï¿½man
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,8 +19,10 @@
 #ifndef DVB_H_
 #define DVB_H_
 
+#if ENABLE_LINUXDVB
 #include <linux/dvb/version.h>
 #include <linux/dvb/frontend.h>
+#endif
 #include <pthread.h>
 #include "htsmsg.h"
 #include "psi.h"
@@ -74,7 +76,9 @@ typedef struct dvb_frontend_parameters dvb_frontend_parameters_t;
  *
  */
 typedef struct dvb_mux_conf {
+#if ENABLE_LINUXDVB
   dvb_frontend_parameters_t dmc_fe_params;
+#endif
   int dmc_polarisation;
   dvb_satconf_t *dmc_satconf;
 #if DVB_API_VERSION >= 5

@@ -1,6 +1,6 @@
 /*
  *  Tvheadend - structures
- *  Copyright (C) 2007 Andreas Öman
+ *  Copyright (C) 2007 Andreas ï¿½man
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,10 @@
 #include "htsmsg.h"
 
 #include "redblack.h"
+
+#if ENABLE_ANDROID
+#define S_IEXEC S_IXUSR
+#endif
 
 typedef struct {
   const char     *name;
@@ -470,6 +474,29 @@ getmonoclock(void)
 
   return tp.tv_sec * 1000000ULL + (tp.tv_nsec / 1000);
 }
+
+#if ENABLE_ANDROID
+static inline time_t timegm(struct tm *tm);
+
+time_t
+timegm(struct tm *tm)
+{
+    time_t ret;
+    char *tz;
+
+   tz = getenv("TZ");
+    setenv("TZ", "", 1);
+    tzset();
+    ret = mktime(tm);
+    if (tz)
+        setenv("TZ", tz, 1);
+    else
+        unsetenv("TZ");
+    tzset();
+    return ret;
+}
+
+#endif
 
 int sri_to_rate(int sri);
 int rate_to_sri(int rate);

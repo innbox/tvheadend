@@ -19,6 +19,8 @@
 #include <string.h>
 
 #include "tvheadend.h"
+
+#if ENABLE_LINUXDVB
 #include "channels.h"
 #include "dvb/dvb.h"
 #include "dvb/dvb_support.h"
@@ -906,3 +908,5 @@ void eit_init ( void )
 void eit_load ( void )
 {
 }
+
+#endif

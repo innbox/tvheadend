@@ -31,6 +31,10 @@
 #include "mkmux.h"
 #include "ebml.h"
 
+#if ENABLE_ANDROID
+#include <sys/uio.h>
+#endif
+
 extern int dvr_iov_max;
 
 TAILQ_HEAD(mk_cue_queue, mk_cue);

@@ -9,6 +9,15 @@ First you need to configure:
 
 	$ ./configure
 
+Sample configure for Android:
+
+$ ./configure --disable-avahi \
+              --enable-bundle \
+              --enable-android \
+              --arch=armeabi-v7a \
+              --cc=/home/jernej/Android/toolchain/android-9/bin/arm-linux-androideabi-gcc \
+              --android_toolchain=/home/jernej/Android/toolchain/android-9
+
 If any dependencies are missing the configure script will complain or attempt
 to disable optional features.
 

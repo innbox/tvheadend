@@ -22,7 +22,6 @@
 #include <assert.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/un.h>
 #include <sys/socket.h>
 #include "htsmsg.h"
 #include "settings.h"

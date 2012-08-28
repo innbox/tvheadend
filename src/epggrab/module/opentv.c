@@ -20,8 +20,9 @@
 #include <assert.h>
 #include <unistd.h>
 #include <regex.h>
-#include <linux/dvb/dmx.h>
 #include "tvheadend.h"
+#if ENABLE_LINUXDVB
+#include <linux/dvb/dmx.h>
 #include "dvb/dvb.h"
 #include "channels.h"
 #include "huffman.h"
@@ -934,3 +935,4 @@ void opentv_load ( void )
 {
   // TODO: do we want to keep a list of channels stored?
 }
+#endif

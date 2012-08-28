@@ -1,6 +1,6 @@
 /*
  *  tvheadend, WEBUI / HTML user interface
- *  Copyright (C) 2008 Andreas Öman
+ *  Copyright (C) 2008 Andreas ï¿½man
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,10 @@
 #include "dvb/dvb_support.h"
 #include "imagecache.h"
 #include "tcp.h"
+
+#if ENABLE_ANDROID
+#include <sys/socket.h>
+#endif
 
 /**
  *
@@ -598,8 +602,8 @@ http_stream_service(http_connection_t *hc, service_t *service)
 				       hc->hc_username,
 				       http_arg_get(&hc->hc_args, "User-Agent"));
   if(s) {
-    name = strdupa(service->s_ch ?
-                   service->s_ch->ch_name : service->s_nicename);
+    name = tvh_strdupa(service->s_ch ?
+                       service->s_ch->ch_name : service->s_nicename);
     pthread_mutex_unlock(&global_lock);
     http_stream_run(hc, &sq, name, mc);
     pthread_mutex_lock(&global_lock);
@@ -625,6 +629,7 @@ http_stream_service(http_connection_t *hc, service_t *service)
 static int
 http_stream_tdmi(http_connection_t *hc, th_dvb_mux_instance_t *tdmi)
 {
+#if ENABLE_LINUXDVB
   th_subscription_t *s;
   streaming_queue_t sq;
   const char *name;
@@ -636,14 +641,14 @@ http_stream_tdmi(http_connection_t *hc, th_dvb_mux_instance_t *tdmi)
 					addrbuf,
 					hc->hc_username,
 					http_arg_get(&hc->hc_args, "User-Agent"));
-  name = strdupa(tdmi->tdmi_identifier);
+  name = tvh_strdupa(tdmi->tdmi_identifier);
   pthread_mutex_unlock(&global_lock);
   http_stream_run(hc, &sq, name, MC_RAW);
   pthread_mutex_lock(&global_lock);
   subscription_unsubscribe(s);
 
   streaming_queue_deinit(&sq);
-
+#endif
   return 0;
 }
 #endif
@@ -701,7 +706,7 @@ http_stream_channel(http_connection_t *hc, channel_t *ch)
                http_arg_get(&hc->hc_args, "User-Agent"));
 
   if(s) {
-    name = strdupa(ch->ch_name);
+    name = tvh_strdupa(ch->ch_name);
     pthread_mutex_unlock(&global_lock);
     http_stream_run(hc, &sq, name, mc);
     pthread_mutex_lock(&global_lock);
@@ -824,8 +829,14 @@ page_dvrfile(http_connection_t *hc, const char *remain, void *opaque)
   file_end = st.st_size-1;
   
   range = http_arg_get(&hc->hc_args, "Range");
+
+#if ENABLE_ANDROID
+  if(range != NULL)
+    sscanf(range, "bytes=%"PRId64"-%"PRId64"", (long long int *)&file_start, (long long int *)&file_end);
+#else
   if(range != NULL)
     sscanf(range, "bytes=%"PRId64"-%"PRId64"", &file_start, &file_end);
+#endif
 
   //Sanity checks
   if(file_start < 0 || file_start >= st.st_size) {
@@ -843,9 +854,14 @@ page_dvrfile(http_connection_t *hc, const char *remain, void *opaque)
   }
 
   content_len = file_end - file_start+1;
-  
+
+#if ENABLE_ANDROID
+  sprintf(range_buf, "bytes %"PRId64"-%"PRId64"/%"PRId64"",
+	  (long long int)file_start, (long long int)file_end, st.st_size);
+#else
   sprintf(range_buf, "bytes %"PRId64"-%"PRId64"/%"PRId64"",
     file_start, file_end, st.st_size);
+#endif
 
   if(file_start > 0)
     lseek(fd, file_start, SEEK_SET);
