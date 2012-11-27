@@ -52,6 +52,10 @@
 #include "settings.h"
 #include <sys/time.h>
 
+#if ENABLE_ANDROID
+#include <sys/socket.h>
+#endif
+
 /* **************************************************************************
  * Datatypes and variables
  * *************************************************************************/
