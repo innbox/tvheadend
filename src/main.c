@@ -680,7 +680,11 @@ main(int argc, char **argv)
   signal(SIGTERM, doexit);
   signal(SIGINT, doexit);
 
+#if ENABLE_ANDROID
+  sigprocmask(SIG_UNBLOCK, &set, NULL);
+#else
   pthread_sigmask(SIG_UNBLOCK, &set, NULL);
+#endif
 
   tvhlog(LOG_NOTICE, "START", "HTS Tvheadend version %s started, "
 	 "running as PID:%d UID:%d GID:%d, settings located in '%s'",
