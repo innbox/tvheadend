@@ -12,6 +12,7 @@ First you need to configure:
 Sample configure for Android:
 
 $ ./configure --disable-avahi \
+              --disable-libav \
               --enable-bundle \
               --enable-android \
               --arch=armeabi-v7a \
