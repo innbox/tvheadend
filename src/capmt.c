@@ -77,8 +77,10 @@
 
 #ifdef __GNUC__
 #include <features.h>
+#if !ENABLE_ANDROID
 #if __GNUC_PREREQ(4, 3)
 #pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 #endif
 #endif
 

@@ -1,6 +1,9 @@
+#include "tvheadend.h"
 #include <time.h>
 #include <sys/ipc.h>
+#if !ENABLE_ANDROID
 #include <sys/shm.h>
+#endif
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,7 +12,6 @@
 #include <stdlib.h>
 
 #include "tvhtime.h"
-#include "tvheadend.h"
 #include "settings.h"
 
 uint32_t tvhtime_update_enabled;
@@ -44,6 +46,7 @@ typedef struct
   int    pad[10];
 } ntp_shm_t;
 
+#if !ENABLE_ANDROID
 static ntp_shm_t *
 ntp_shm_init ( void )
 {
@@ -70,6 +73,7 @@ ntp_shm_init ( void )
 
   return shmptr;
 }
+#endif
 
 /*
  * Update time
@@ -77,6 +81,7 @@ ntp_shm_init ( void )
 void
 tvhtime_update ( struct tm *tm )
 {
+#if !ENABLE_ANDROID
   time_t now;
   struct timeval tv;
   ntp_shm_t *ntp_shm;
@@ -120,6 +125,7 @@ tvhtime_update ( struct tm *tm )
     ntp_shm->count++;
     ntp_shm->valid = 1;
   }
+#endif
 }
 
 /* Initialise */
